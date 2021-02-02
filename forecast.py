@@ -20,14 +20,6 @@ from waveshare_epd import epd7in5_V2
 
 logging.basicConfig(level=logging.INFO)
 
-my_ip = ni.ifaddresses('wlan0')[AF_INET][0]['addr']
-
-# API Keys and zip code to drive forecast data
-api_key = os.environ["OPEN_WEATHER_MAP_API_KEY"]
-zip_code = os.environ["WEATHER_ZIP_CODE"]
-
-days = 5 # Days to gather for forecast
-
 font_file = os.path.join(picdir, 'Font.ttc')
 font96 = ImageFont.truetype(font_file, 96)
 font80 = ImageFont.truetype(font_file, 80)
@@ -39,9 +31,7 @@ font18 = ImageFont.truetype(font_file, 18)
 font16 = ImageFont.truetype(font_file, 16)
 font10 = ImageFont.truetype(font_file, 10)
 
-pad = 10 # Element padding
-
-# Return icon imabe based on forecast category
+# Return icon image based on forecast category
 def get_icon(forecast):
     if forecast['category'] == 'Rain':
         pouring = Image.open(os.path.join(picdir, 'weather-pouring.jpg'))
@@ -72,7 +62,7 @@ def get_day_name(date):
      return date.strftime("%A")
 
 # Get the 5 day forecast from openweathermap.org
-def get_forecast(zip_code, days):
+def get_forecast(api_key, zip_code, days):
     cnt = days * 8
     params = (
         ('zip', f'{zip_code},us'),
@@ -84,7 +74,7 @@ def get_forecast(zip_code, days):
     return response.json()
 
 # Get the current weather conditions at given zip code
-def get_weather(zip_code):
+def get_weather(api_key, zip_code):
     params = (
         ('zip', f'{zip_code},us'),
         ('appid', api_key),
@@ -169,9 +159,16 @@ def main():
 
         logging.info(f"Current date: {now}")
 
+        my_ip = ni.ifaddresses('wlan0')[AF_INET][0]['addr']
+
+        # API Keys and zip code to drive forecast data
+        api_key = os.environ["OPEN_WEATHER_MAP_API_KEY"]
+        zip_code = os.environ["WEATHER_ZIP_CODE"]
+
         # get forecast data from API
-        forecast = get_forecast(zip_code, days)
-        weather = get_weather(zip_code)
+        days = 5 # Days to gather for forecast
+        forecast = get_forecast(api_key, zip_code, days)
+        weather = get_weather(api_key, zip_code)
 
         title = f"{forecast['city']['name']}, {zip_code} "
 
@@ -195,6 +192,9 @@ def main():
 
         # Drawing utility
         draw = ImageDraw.Draw(Himage)
+
+        # Element padding
+        pad = 10
 
         # IP
         draw.text((710, pad), my_ip, font = font10, fill = 0)
@@ -221,10 +221,10 @@ def main():
         x_offset = pad + 30
         draw.text((x_offset, y_offset), f"{w['wind']['speed']:2.1f} mph {w['wind']['direction']}", font = font18, fill = 0)
         wind = Image.open(os.path.join(picdir, 'wind.jpg'))
-        Himage.paste(wind, ((x_offset + 110), (y_offset - 3)))
+        Himage.paste(wind, ((x_offset + 120), (y_offset - 3)))
 
         # Humidity
-        x_offset += 150
+        x_offset += 160
         draw.text((x_offset, y_offset), f"{w['humidity']:3.0f} % Humidity ", font = font18, fill = 0)
         
         # Pressure
