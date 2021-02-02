@@ -78,6 +78,7 @@ def get_weather(api_key, zip_code):
     response = requests.get('http://api.openweathermap.org/data/2.5/weather', params=params)
     return response.json()
 
+# Draw current weather information to the display image
 def draw_current_weather(image, w):
         # Date and time
         now = datetime.now()
@@ -145,7 +146,6 @@ def draw_current_weather(image, w):
         draw.line(((pad + 20) , 215, (image.width - pad - 20), 215), fill = 0, width = 3)
 
         return image
-
 
 # Draw a forecast day block from the x,y top left corner position for the block
 def draw_day(image, forecast, x, y):
@@ -236,7 +236,7 @@ def draw_forecast(image, forecast):
 
     return image
 
-# Gather elemets we want from larger dict
+# Gather elements we want from larger dict
 def gather_weather_data(weather):
     w = {'temp': weather['main']['temp']}
     w['description'] = weather['weather'][0]['description']
