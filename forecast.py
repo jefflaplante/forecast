@@ -182,7 +182,9 @@ def main():
         w['wind'] = {'speed': weather['wind']['speed'], 'degree': weather['wind']['deg'], 'direction': cardinal_direction(weather['wind']['deg'])}
         w['pressure'] = weather['main']['pressure']
         w['humidity'] = weather['main']['humidity']
-        w['rain_accum'] = weather['rain']['1h']
+
+        if 'rain' in weather:
+            w['rain_accum'] = weather['rain']['1h']
 
         # Initialize the display driver
         epd = epd7in5_V2.EPD()  # E-Paper display driver object
@@ -231,7 +233,8 @@ def main():
 
         # Rain
         x_offset += 95
-        draw.text((x_offset, y_offset), f"{w['rain_accum']:2.2f} in/hr of rain ", font = font18, fill = 0)
+        if 'rain_accum' in w:
+            draw.text((x_offset, y_offset), f"{w['rain_accum']:2.2f} in/hr of rain ", font = font18, fill = 0)
 
         # Update time
         x_offset += 200
