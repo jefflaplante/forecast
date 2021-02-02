@@ -20,16 +20,11 @@ from waveshare_epd import epd7in5_V2
 
 logging.basicConfig(level=logging.INFO)
 
-font_file = os.path.join(picdir, 'Font.ttc')
-font96 = ImageFont.truetype(font_file, 96)
-font80 = ImageFont.truetype(font_file, 80)
-font54 = ImageFont.truetype(font_file, 54)
-font48 = ImageFont.truetype(font_file, 48)
-font24 = ImageFont.truetype(font_file, 24)
-font22 = ImageFont.truetype(font_file, 22)
-font18 = ImageFont.truetype(font_file, 18)
-font16 = ImageFont.truetype(font_file, 16)
-font10 = ImageFont.truetype(font_file, 10)
+# Get a display font to write with
+def get_font(size):
+    font_file = os.path.join(picdir, 'Font.ttc')
+    f = ImageFont.truetype(font_file, size)
+    return f
 
 # Return icon image based on forecast category
 def get_icon(forecast):
@@ -83,6 +78,75 @@ def get_weather(api_key, zip_code):
     response = requests.get('http://api.openweathermap.org/data/2.5/weather', params=params)
     return response.json()
 
+def draw_current_weather(image, w):
+        # Date and time
+        now = datetime.now()
+        current_time = now.strftime("%H:%M")
+        current_day = now.strftime("%A")
+        current_date_str = now.strftime("%b %d")
+
+        logging.info(f"Current date: {now}")
+
+        my_ip = ni.ifaddresses('wlan0')[AF_INET][0]['addr']
+
+        title = f"{w['city']}, {w['zip_code']} "
+
+        # Drawing utility
+        draw = ImageDraw.Draw(image)
+
+        # Element padding
+        pad = 10
+
+        # IP
+        draw.text((710, pad), my_ip, font = get_font(10), fill = 0)
+
+        # Title
+        draw.text((pad, pad), title, font = get_font(24), fill = 0)
+
+        # Date
+        draw.text((40, 50), f"{current_day} ", font = get_font(80), fill = 0)
+        draw.text((342, 105), f"{current_date_str} ", font = get_font(22), fill = 0)
+
+        # Icon
+        icon = get_icon(w)
+        image.paste(icon, (540, 40))
+
+        # Current Temp.    
+        draw.text((600, 30), f"{w['temp']:3.0f}° ", font = get_font(96), fill = 0)
+
+        # Description
+        draw.text((480, 105), f"{w['description']} ", font = get_font(18), fill = 0)
+        
+        # Wind
+        y_offset = 170
+        x_offset = pad + 30
+        draw.text((x_offset, y_offset), f"{w['wind']['speed']:2.1f} mph {w['wind']['direction']}", font = get_font(18), fill = 0)
+        wind = Image.open(os.path.join(picdir, 'wind.jpg'))
+        image.paste(wind, ((x_offset + 120), (y_offset - 3)))
+
+        # Humidity
+        x_offset += 160
+        draw.text((x_offset, y_offset), f"{w['humidity']:3.0f} % Humidity ", font = get_font(18), fill = 0)
+        
+        # Pressure
+        x_offset += 150
+        draw.text((x_offset, y_offset), f"{w['pressure']:4.0f} mb ", font = get_font(18), fill = 0)
+
+        # Rain
+        x_offset += 95
+        if 'rain_accum' in w:
+            draw.text((x_offset, y_offset), f"{w['rain_accum']:2.2f} in/hr of rain ", font = get_font(18), fill = 0)
+
+        # Update time
+        x_offset += 200
+        draw.text((x_offset, y_offset), f"updated: {current_time}", font = get_font(18), fill = 0)
+        
+        # Divider Line
+        draw.line(((pad + 20) , 215, (image.width - pad - 20), 215), fill = 0, width = 3)
+
+        return image
+
+
 # Draw a forecast day block from the x,y top left corner position for the block
 def draw_day(image, forecast, x, y):
     wind = Image.open(os.path.join(picdir, 'wind.jpg'))
@@ -108,8 +172,8 @@ def draw_day(image, forecast, x, y):
     day_str = f"{day_date.strftime('%a')} "
     date_str = f"{day_date.strftime('%m/%d')} "
 
-    d.text(((x_offset + 10), y_offset), day_str, font = font22, fill = 0)
-    d.text(((x_offset + 85), (y_offset + 6)), date_str, font = font16, fill = 0)
+    d.text(((x_offset + 10), y_offset), day_str, font = get_font(22), fill = 0)
+    d.text(((x_offset + 85), (y_offset + 6)), date_str, font = get_font(16), fill = 0)
 
     y_offset += 35
 
@@ -120,7 +184,7 @@ def draw_day(image, forecast, x, y):
     # Description
     x_offset += 15
     y_offset += 55
-    d.text((x_offset, y_offset), f"{forecast['description']} ", font = font16, fill = 0)
+    d.text((x_offset, y_offset), f"{forecast['description']} ", font = get_font(16), fill = 0)
  
     # Divider Line
     x_offset -= 10
@@ -130,15 +194,61 @@ def draw_day(image, forecast, x, y):
     # Temp
     x_offset += 20
     y_offset += 15
-    d.text((x_offset, y_offset), f"{forecast['temp']:3.0f}°", font = font54, fill = 0)
+    d.text((x_offset, y_offset), f"{forecast['temp']:3.0f}°", font = get_font(54), fill = 0)
 
     # Wind Speed
     x_offset -= 15
     y_offset += 80
-    d.text((x_offset, y_offset), f"{forecast['wind_speed']:2.1f} mph", font = font16, fill = 0)
+    d.text((x_offset, y_offset), f"{forecast['wind_speed']:2.1f} mph", font = get_font(16), fill = 0)
     image.paste(wind, ((x_offset + 80), (y_offset - 5)))
 
     return image
+
+# Draw the forecast to the display image
+def draw_forecast(image, forecast):
+    # Iterate over forecast days in 'list' and draw widgets for each
+    offset = 10
+    day_vert = 225
+    day_width = 156
+
+    day_register = 'day'
+    time_counter = 0
+
+    for x in forecast['list']:
+        temp = x['main']['temp']
+        category = x['weather'][0]['main']
+        description = x['weather'][0]['description']
+        wind_speed = x['wind']['speed']
+        date_str = x['dt_txt']
+        day = get_day_name(get_datetime(date_str))
+
+        f = {'date_str': date_str, 'temp': temp, 'category': category, 'description': description, 'wind_speed': wind_speed}
+
+        # forecast data returns a dict for every 3 hours. We only want daily so find unique days and get third reporting for noon for that day.
+        if day_register == day:
+            if time_counter == 3:
+                image = draw_day(image, f, offset, day_vert) # Draw the day widget
+                offset += day_width
+            time_counter += 1
+        else:
+            day_register = day
+            time_counter = 0
+
+    return image
+
+# Gather elemets we want from larger dict
+def gather_weather_data(weather):
+    w = {'temp': weather['main']['temp']}
+    w['description'] = weather['weather'][0]['description']
+    w['category'] = weather['weather'][0]['main']
+    w['wind'] = {'speed': weather['wind']['speed'], 'degree': weather['wind']['deg'], 'direction': cardinal_direction(weather['wind']['deg'])}
+    w['pressure'] = weather['main']['pressure']
+    w['humidity'] = weather['main']['humidity']
+
+    if 'rain' in weather:
+        w['rain_accum'] = weather['rain']['1h']
+
+    return w
 
 # Update e-paper display
 def update_display(image, epd):
@@ -151,16 +261,6 @@ def main():
     try:
         logging.info("Refreshing forecast")
 
-        # Date and time
-        now = datetime.now()
-        current_time = now.strftime("%H:%M")
-        current_day = now.strftime("%A")
-        current_date_str = now.strftime("%b %d")
-
-        logging.info(f"Current date: {now}")
-
-        my_ip = ni.ifaddresses('wlan0')[AF_INET][0]['addr']
-
         # API Keys and zip code to drive forecast data
         api_key = os.environ["OPEN_WEATHER_MAP_API_KEY"]
         zip_code = os.environ["WEATHER_ZIP_CODE"]
@@ -170,112 +270,29 @@ def main():
         forecast = get_forecast(api_key, zip_code, days)
         weather = get_weather(api_key, zip_code)
 
-        title = f"{forecast['city']['name']}, {zip_code} "
-
         # Current Weather Conditions from API response
-        w = {'temp': weather['main']['temp']}
-        w['description'] = weather['weather'][0]['description']
-        w['category'] = weather['weather'][0]['main']
-        w['wind'] = {'speed': weather['wind']['speed'], 'degree': weather['wind']['deg'], 'direction': cardinal_direction(weather['wind']['deg'])}
-        w['pressure'] = weather['main']['pressure']
-        w['humidity'] = weather['main']['humidity']
-
-        if 'rain' in weather:
-            w['rain_accum'] = weather['rain']['1h']
+        w = gather_weather_data(weather)
+        w['zip_code'] = zip_code
+        w['city'] = forecast['city']['name']
 
         # Initialize the display driver
         epd = epd7in5_V2.EPD()  # E-Paper display driver object
         epd.init()
 
         # Create a new image to draw our display on
-        Himage = Image.new('1', (epd.width, epd.height), 255)  # 255: white
+        display_image = Image.new('1', (epd.width, epd.height), 255)  # 255: white
 
-        # Drawing utility
-        draw = ImageDraw.Draw(Himage)
+        # Draw current conditions to the display image
+        display_image = draw_current_weather(display_image, w)
 
-        # Element padding
-        pad = 10
-
-        # IP
-        draw.text((710, pad), my_ip, font = font10, fill = 0)
-
-        # Title
-        draw.text((pad, pad), title, font = font24, fill = 0)
-
-        # Date
-        draw.text((40, 50), f"{current_day} ", font = font80, fill = 0)
-        draw.text((342, 105), f"{current_date_str} ", font = font22, fill = 0)
-
-        # Icon
-        icon = get_icon(w)
-        Himage.paste(icon, (540, 40))
-
-        # Current Temp.    
-        draw.text((600, 30), f"{w['temp']:3.0f}° ", font = font96, fill = 0)
-
-        # Description
-        draw.text((480, 105), f"{w['description']} ", font = font18, fill = 0)
-        
-        # Wind
-        y_offset = 170
-        x_offset = pad + 30
-        draw.text((x_offset, y_offset), f"{w['wind']['speed']:2.1f} mph {w['wind']['direction']}", font = font18, fill = 0)
-        wind = Image.open(os.path.join(picdir, 'wind.jpg'))
-        Himage.paste(wind, ((x_offset + 120), (y_offset - 3)))
-
-        # Humidity
-        x_offset += 160
-        draw.text((x_offset, y_offset), f"{w['humidity']:3.0f} % Humidity ", font = font18, fill = 0)
-        
-        # Pressure
-        x_offset += 150
-        draw.text((x_offset, y_offset), f"{w['pressure']:4.0f} mb ", font = font18, fill = 0)
-
-        # Rain
-        x_offset += 95
-        if 'rain_accum' in w:
-            draw.text((x_offset, y_offset), f"{w['rain_accum']:2.2f} in/hr of rain ", font = font18, fill = 0)
-
-        # Update time
-        x_offset += 200
-        draw.text((x_offset, y_offset), f"updated: {current_time}", font = font18, fill = 0)
-        
-        # Divider Line
-        draw.line(((pad + 20) , 215, (epd.width - pad - 20), 215), fill = 0, width = 3)
-
-        # Iterate over forecast days in 'list' and draw widgets for each
-        offset = pad
-        day_vert = 225
-        day_width = 156
-
-        day_register = 'day'
-        time_counter = 0
-
-        for x in forecast['list']:
-            temp = x['main']['temp']
-            category = x['weather'][0]['main']
-            description = x['weather'][0]['description']
-            wind_speed = x['wind']['speed']
-            date_str = x['dt_txt']
-            day = get_day_name(get_datetime(date_str))
-
-            f = {'date_str': date_str, 'temp': temp, 'category': category, 'description': description, 'wind_speed': wind_speed}
-
-            # forecast data returns a dict for every 3 hours. We only want daily so find unique days and get third reporting for noon for that day.
-            if day_register == day:
-                if time_counter == 3:
-                    Himage = draw_day(Himage, f, offset, day_vert) # Draw the day widget
-                    offset += day_width
-                time_counter += 1
-            else:
-                day_register = day
-                time_counter = 0
+        # Draw the forecast to the display image
+        display_image = draw_forecast(display_image, forecast)
 
         # Update e-paper display
-        update_display(Himage, epd)
+        update_display(display_image, epd)
 
         # Write out image to disk as a jpeg
-        Himage.save('display.jpg', "JPEG")
+        display_image.save('display.jpg', "JPEG")
 
     except IOError as e:
         logging.info(e)
