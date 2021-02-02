@@ -61,3 +61,10 @@ If you would like to view your e-paper display contents from the web then run th
 docker run --name forecast-nginx -v /home/pi/forecast/www:/usr/share/nginx/html:ro -d -p 80:80 nginx:alpine
 ```
 
+To install docker on your pi, the easiest way is to use get.docker.com.
+
+```
+sudo curl -sL get.docker.com | bash
+```
+
+
