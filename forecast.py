@@ -7,7 +7,6 @@ import time
 import traceback
 import logging
 from datetime import datetime
-import subprocess
 
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')
 libdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'lib')
@@ -15,12 +14,13 @@ if os.path.exists(libdir):
     sys.path.append(libdir)
 
 from PIL import Image,ImageDraw,ImageFont
+from netifaces import AF_INET
+import netifaces as ni
 from waveshare_epd import epd7in5_V2
 
 logging.basicConfig(level=logging.INFO)
 
-my_ip = subprocess.run(['ifconfig', 'wlan0', '|', 'grep', '-e', '\'inet\s\'', '|', 'awk', '\'{print $2}\''], stdout=subprocess.PIPE).stdout.decode('utf-8')
-print(my_ip)
+my_ip = ni.ifaddresses('wlan0')[AF_INET][0]['addr']
 
 # API Keys and zip code to drive forecast data
 api_key = os.environ["OPEN_WEATHER_MAP_API_KEY"]
@@ -37,6 +37,7 @@ font24 = ImageFont.truetype(font_file, 24)
 font22 = ImageFont.truetype(font_file, 22)
 font18 = ImageFont.truetype(font_file, 18)
 font16 = ImageFont.truetype(font_file, 16)
+font10 = ImageFont.truetype(font_file, 10)
 
 pad = 10 # Element padding
 
@@ -193,6 +194,9 @@ def main():
         # Drawing utility
         draw = ImageDraw.Draw(Himage)
 
+        # IP
+        draw.text((710, pad), my_ip, font = font10, fill = 0)
+
         # Title
         draw.text((pad, pad), title, font = font24, fill = 0)
 
@@ -227,7 +231,7 @@ def main():
 
         # Rain
         x_offset += 95
-        draw.text((x_offset, y_offset), f"{w['rain_accum']:2.2f}\" rain this hour", font = font18, fill = 0)
+        draw.text((x_offset, y_offset), f"{w['rain_accum']:2.2f} in/hr of rain ", font = font18, fill = 0)
 
         # Update time
         x_offset += 200
