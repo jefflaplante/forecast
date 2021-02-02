@@ -13,12 +13,24 @@ libdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'lib')
 if os.path.exists(libdir):
     sys.path.append(libdir)
 
+import qrcode
 from PIL import Image,ImageDraw,ImageFont
 from netifaces import AF_INET
 import netifaces as ni
 from waveshare_epd import epd7in5_V2
 
 logging.basicConfig(level=logging.INFO)
+
+# Generate QR Code
+def generate_qr_code(input_data):
+    qr = qrcode.QRCode(
+        version=1,
+        box_size=1,
+        border=0)
+    qr.add_data(input_data)
+    qr.make(fit=True)
+    img = qr.make_image(fill='black', back_color='white')
+    return img
 
 # Get a display font to write with
 def get_font(size):
@@ -99,7 +111,9 @@ def draw_current_weather(image, w):
         pad = 10
 
         # IP
-        draw.text((710, pad), my_ip, font = get_font(10), fill = 0)
+        draw.text((670, pad), my_ip, font = get_font(10), fill = 0)
+        qr = generate_qr_code(f'http://{my_ip}')
+        image.paste(qr, (745, pad))
 
         # Title
         draw.text((pad, pad), title, font = get_font(24), fill = 0)
