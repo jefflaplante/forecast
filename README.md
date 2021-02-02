@@ -47,9 +47,17 @@ In order to update the display periodically, we will use linux's crontab. Edit y
 line to your crontab:
 
 ```
-*/15 * * * * . /home/pi/forecast/.env; /home/pi/forecast/forecast.py >> /home/pi/forecast/forecast.log 2>&1
+*/15 * * * * . /home/pi/forecast/.env; cd /home/pi/forecast/www; /home/pi/forecast/forecast.py >> /home/pi/forecast/forecast.log 2>&1
 ```
 
 Adjust as necessary to account for where you have located the forecast script repo. This entry will run the script every 15 minutes. Make
 sure that you include a blank line at the end of the crontab file, else your job will fail to run and you will be left wondering why.
+
+## Web Display
+
+If you would like to view your e-paper display contents from the web then run this NGINX container on your pi.
+
+```
+docker run --name forecast-nginx -v /home/pi/forecast/www:/usr/share/nginx/html:ro -d -p 80:80 nginx:alpine
+```
 
