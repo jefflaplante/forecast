@@ -20,6 +20,8 @@ def get_day_name(date):
 
 # Generate QR Code
 def generate_qr_code(input_data):
+    logging.info("Generating QR code")
+
     qr = qrcode.QRCode(
         version=1,
         box_size=1,
@@ -52,6 +54,8 @@ def get_icon(forecast):
 
 # Draw current weather information to the display image
 def draw_current_weather(image, w):
+        logging.info("Drawing current weather widgets")
+
         # Date and time
         now = datetime.now()
         current_time = now.strftime("%H:%M")
@@ -122,6 +126,8 @@ def draw_current_weather(image, w):
 
 # Draw a forecast day block from the x,y top left corner position for the block
 def draw_day(image, forecast, x, y):
+    logging.info("Drawing day widgets")
+
     wind = Image.open(os.path.join(picdir, 'wind.jpg'))
 
     # container size
@@ -179,6 +185,8 @@ def draw_day(image, forecast, x, y):
 
 # Draw the forecast to the display image
 def draw_forecast(image, forecast):
+    logging.info("Iterating Forecast Days")
+
     # Iterate over forecast days in 'list' and draw widgets for each
     offset = 10
     day_vert = 225
