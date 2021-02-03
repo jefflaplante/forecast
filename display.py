@@ -78,23 +78,27 @@ def _draw_current_weather(image, w):
     draw.text((pad, pad), title, font = get_font(24), fill = 0)
 
     # IP & QR Code for IP
-    draw.text((680, pad), my_ip, font = get_font(10), fill = 0)
-    image.paste(qr, (755, pad))
+    draw.text((685, pad), my_ip, font = get_font(10), fill = 0)
+    image.paste(qr, (760, pad))
 
-    # Date
+    # ---
+
+    # Today's Date
     draw.text((30, 50), f"{current_day} ", font = get_font(80), fill = 0)
-    draw.text((320, 105), f"{current_date_str} ", font = get_font(22), fill = 0)
+    draw.text((180, 105), f"{current_date_str} ", font = get_font(22), fill = 0)
 
-    # Icon
+    # Weather Icon
     icon = get_icon(w)
     image.paste(icon, (540, 40))
 
-    # Current Temp.    
+    # Temp.    
     draw.text((600, 30), f"{w['temp']:3.0f}° ", font = get_font(96), fill = 0)
 
-    # Description
+    # Weather Description
     draw.text((480, 105), f"{w['description']} ", font = get_font(18), fill = 0)
     
+    # ---
+
     # Wind
     y_offset = 200
     x_offset = pad + 30
@@ -115,10 +119,14 @@ def _draw_current_weather(image, w):
     if 'rain_accum' in w:
         draw.text((x_offset, y_offset), f"{w['rain_accum']:2.2f} in/hr of rain ", font = get_font(18), fill = 0)
 
+    # ---
+
     # Update time
     x_offset += 200
     draw.text((x_offset, y_offset), f"updated: {current_time}", font = get_font(18), fill = 0)
     
+    # ---
+
     # Divider Line
     y_offset += 40
     draw.line(((pad + 20) , y_offset, (image.width - pad - 20), y_offset), fill = 0, width = 3)
