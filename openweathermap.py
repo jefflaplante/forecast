@@ -19,6 +19,9 @@ class OpenWeatherMap(WeatherProvider):
             ('units', 'imperial'),
         )
         response = requests.get(f'{self.endpoint}weather', params = params)
+
+        print(response.json())
+
         return response.json()
 
     # Get the current weather conditions at given zip code
@@ -43,6 +46,7 @@ class OpenWeatherMap(WeatherProvider):
         w['category'] = d['weather'][0]['main']
         w['city'] = d['sys']['name']
         w['zip_code'] = self.zip_code
+
         return w
     
     # Get the 5 day forecast from openweathermap.org
@@ -57,7 +61,7 @@ class OpenWeatherMap(WeatherProvider):
         response = requests.get(f'{self.endpoint}forecast', params = params)
 
         print(response.json())
-        
+
         return response.json()
 
     def sample_data(self):
