@@ -6,6 +6,7 @@ from weatherprovider import WeatherProvider
 
 class OpenWeatherMap(WeatherProvider):
     def __init__(self):
+        logging.info("Loading OpenWeatherMap provider")
         self.api_key = os.environ["OPEN_WEATHER_MAP_API_KEY"]
         self.zip_code = os.environ["WEATHER_ZIP_CODE"]
 
@@ -40,6 +41,8 @@ class OpenWeatherMap(WeatherProvider):
 
         w['description'] = d['weather'][0]['description']
         w['category'] = d['weather'][0]['main']
+        w['city'] = d['city']['name']
+        w['zip_code'] = self.zip_code
 
         return w
     

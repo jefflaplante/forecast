@@ -6,6 +6,7 @@ from weatherprovider import WeatherProvider
 
 class Ambient(WeatherProvider):
     def __init__(self):
+        logging.info("Loading Ambient Weather provider")
         self.api_key = os.environ["AMBIENT_API_KEY"]
         self.app_key = os.environ["AMBIENT_APP_KEY"]
         self.device_mac = os.environ["AMBIENT_DEVICE_MAC"]
