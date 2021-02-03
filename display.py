@@ -154,7 +154,7 @@ def _draw_day(image, forecast, x, y):
     d.text(((x_offset + 10), y_offset), day_str, font = get_font(22), fill = 0)
     d.text(((x_offset + 85), (y_offset + 6)), date_str, font = get_font(16), fill = 0)
 
-    y_offset += 35
+    y_offset += 30
 
     # Icon
     icon = get_icon(forecast)
@@ -162,7 +162,7 @@ def _draw_day(image, forecast, x, y):
 
     # Description
     x_offset += 15
-    y_offset += 55
+    y_offset += 50
     d.text((x_offset, y_offset), f"{forecast['description']} ", font = get_font(16), fill = 0)
  
     # Divider Line
@@ -172,12 +172,12 @@ def _draw_day(image, forecast, x, y):
 
     # Temp
     x_offset += 20
-    y_offset += 15
+    y_offset += 10
     d.text((x_offset, y_offset), f"{forecast['temp']:3.0f}°", font = get_font(54), fill = 0)
 
     # Wind Speed
     x_offset -= 15
-    y_offset += 80
+    y_offset += 70
     d.text((x_offset, y_offset), f"{forecast['wind_speed']:2.1f} mph", font = get_font(16), fill = 0)
     image.paste(wind, ((x_offset + 80), (y_offset - 5)))
 
