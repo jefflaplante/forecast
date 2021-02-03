@@ -225,7 +225,7 @@ def draw(dims, weather, forecast):
     display_image = Image.new('1', (width, height), 255)  # 255: white
 
     # Draw current conditions to the display image
-    display_image = _draw_current_weather(display_image, w)
+    display_image = _draw_current_weather(display_image, weather)
 
     # Draw the forecast to the display image
     display_image = _draw_forecast(display_image, forecast)
