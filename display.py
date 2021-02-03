@@ -59,7 +59,7 @@ def _draw_current_weather(image, w):
     # Date and time
     now = datetime.now()
     current_time = now.strftime("%H:%M")
-    current_day = now.strftime("%A")
+    current_day = now.strftime("%a")
     current_date_str = now.strftime("%b %d")
 
     logging.info(f"Current date: {now}")
@@ -74,16 +74,16 @@ def _draw_current_weather(image, w):
     # Element padding
     pad = 10
 
-    # IP
-    draw.text((670, pad), my_ip, font = get_font(10), fill = 0)
-    image.paste(qr, (745, pad))
-
     # Title
     draw.text((pad, pad), title, font = get_font(24), fill = 0)
 
+    # IP & QR Code for IP
+    draw.text((680, pad), my_ip, font = get_font(10), fill = 0)
+    image.paste(qr, (755, pad))
+
     # Date
-    draw.text((40, 50), f"{current_day} ", font = get_font(80), fill = 0)
-    draw.text((342, 105), f"{current_date_str} ", font = get_font(22), fill = 0)
+    draw.text((30, 50), f"{current_day} ", font = get_font(80), fill = 0)
+    draw.text((320, 105), f"{current_date_str} ", font = get_font(22), fill = 0)
 
     # Icon
     icon = get_icon(w)
@@ -133,16 +133,12 @@ def _draw_day(image, forecast, x, y):
 
     # container size
     width = 156
-    height = 250
     pad = 10
 
     y_offset = 0
 
     # drawing utility
     d = ImageDraw.Draw(image)
-
-    # Container bounds
-    d.rectangle((x, y, (x + width), (y + height)), outline = 255)
 
     # Day of week
     x_offset = x + pad
@@ -188,14 +184,13 @@ def _draw_day(image, forecast, x, y):
 def _draw_forecast(image, forecast):
     logging.info("Iterating Forecast Days")
 
-    # Iterate over forecast days in 'list' and draw widgets for each
     offset = 10
-    day_vert = 240
+    day_vert = 245
     day_width = 156
-
     day_register = 'day'
     time_counter = 0
 
+    # Iterate over forecast days in 'list' and draw widgets for each
     for x in forecast['list']:
         temp = x['main']['temp']
         category = x['weather'][0]['main']
@@ -204,9 +199,16 @@ def _draw_forecast(image, forecast):
         date_str = x['dt_txt']
         day = get_day_name(get_datetime(date_str))
 
-        f = {'date_str': date_str, 'temp': temp, 'category': category, 'description': description, 'wind_speed': wind_speed}
+        f = {
+            'date_str': date_str, 
+            'temp': temp, 
+            'category': category, 
+            'description': description, 
+            'wind_speed': wind_speed
+            }
 
-        # forecast data returns a dict for every 3 hours. We only want daily so find unique days and get third reporting for noon for that day.
+        # forecast data returns a dict for every 3 hours. 
+        # We only want daily so find unique days and get third reporting for noon for that day.
         if day_register == day:
             if time_counter == 3:
                 image = _draw_day(image, f, offset, day_vert) # Draw the day widget
