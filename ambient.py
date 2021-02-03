@@ -28,10 +28,9 @@ class Ambient(WeatherProvider):
         w['pressure'] = d['baromrelin']
         w['pressure_unit'] = 'mb'
         w['humidity'] = d['humidity']
-        
         return w
 
-    def sample_weather(self):
+    def sample_data(self):
         w = [
             {
                 "dateutc": 1612332600000,

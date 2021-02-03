@@ -24,9 +24,6 @@ class OpenWeatherMap(WeatherProvider):
     # Get the current weather conditions at given zip code
     def get_weather(self):
         d = self._get()
-
-        print(d)
-
         w = {}
         w['temp'] = d['main']['temp']
         w['pressure'] = d['main']['pressure']
@@ -44,9 +41,8 @@ class OpenWeatherMap(WeatherProvider):
 
         w['description'] = d['weather'][0]['description']
         w['category'] = d['weather'][0]['main']
-        w['city'] = d['city']['name']
+        w['city'] = d['sys']['name']
         w['zip_code'] = self.zip_code
-
         return w
     
     # Get the 5 day forecast from openweathermap.org
@@ -59,4 +55,49 @@ class OpenWeatherMap(WeatherProvider):
             ('units', 'imperial'),
         )
         response = requests.get(f'{self.endpoint}forecast', params = params)
+
+        print(response.json())
+        
         return response.json()
+
+    def sample_data(self):
+        w = {
+        'coord': {
+            'lon': -122.1121,
+            'lat': 48.1829
+            },
+        'weather': [{
+            'id': 800,
+            'main': 'Clear',
+            'description': 'clear sky',
+            'icon': '01d'
+            }], 
+        'base': 'stations',
+        'main': {
+            'temp': 40.68,
+            'feels_like': 35.33,
+            'temp_min': 39,
+            'temp_max': 42.01,
+            'pressure': 1021,
+            'humidity': 87
+            }, 
+        'visibility': 10000,
+        'wind': {
+            'speed': 4.61,
+            'deg': 80}, 
+            'clouds': {
+                'all': 1
+            },
+        'dt': 1612379637, 
+        'sys': {
+            'type': 1,
+            'id': 3363,
+            'country': 'US',
+            'sunrise': 1612366406,
+            'sunset': 1612401070},
+            'timezone': -28800,
+            'id': 0,
+            'name': 'Arlington',
+            'cod': 200
+        }
+        return w
