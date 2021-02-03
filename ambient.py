@@ -30,9 +30,8 @@ class Ambient(WeatherProvider):
         w['humidity'] = d['humidity']
         return w
 
-    def sample_data(self):
-        w = [
-            {
+    def sample_data_weather(self):
+        w = [{
                 "dateutc": 1612332600000,
                 "tempinf": 69.4,
                 "battin": 1,
@@ -70,6 +69,5 @@ class Ambient(WeatherProvider):
                 "lastRain": "2021-02-03T06:10:00.000Z",
                 "loc": "ambient-prod-5",
                 "date": "2021-02-03T06:10:00.000Z"
-            }
-        ]
+        }]
         return w

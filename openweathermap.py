@@ -61,7 +61,7 @@ class OpenWeatherMap(WeatherProvider):
 
         return response.json()
 
-    def sample_data(self):
+    def sample_data_weather(self):
         w = {
         'coord': {
             'lon': -122.1121,
@@ -101,5 +101,49 @@ class OpenWeatherMap(WeatherProvider):
         'id': 0,
         'name': 'Arlington',
         'cod': 200
+        }
+        return w
+
+    def sample_data_forecast(self):
+        w = {   
+            'city': {
+                'coord': {'lat': 48.1829, 'lon': -122.1121},
+                'country': 'US',
+                'id': 0,
+                'name': 'Arlington',
+                'population': 0,
+                'sunrise': 1612366406,
+                'sunset': 1612401070,
+                'timezone': -28800
+            },
+            'cnt': 8,
+            'cod': '200',
+            'list': [{   
+                    'clouds': {'all': 1},
+                    'dt': 1612386000,
+                    'dt_txt': '2021-02-03 21:00:00',
+                    'main': {   
+                        'feels_like': 39.34,
+                        'grnd_level': 1010,
+                        'humidity': 70,
+                        'pressure': 1021,
+                        'sea_level': 1021,
+                        'temp': 44.02,
+                        'temp_kf': -0.23,
+                        'temp_max': 44.44,
+                        'temp_min': 44.02
+                    },
+                    'pop': 0,
+                    'sys': {'pod': 'd'},
+                    'visibility': 10000,
+                    'weather': [{   
+                        'description': 'clear sky',
+                        'icon': '01d',
+                        'id': 800,
+                        'main': 'Clear'
+                    }],
+                    'wind': {'deg': 275, 'speed': 2.75}
+                }],
+            'message': 0
         }
         return w
