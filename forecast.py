@@ -43,11 +43,11 @@ def main():
         # Generate a new weather display image
         img = display.draw((epd.width, epd.height), w, f)
 
-        # Update e-paper display
-        update_display(img, epd)
-
         # Write out image to disk as a jpeg
         img.save('display.jpg', "JPEG")
+
+        # Update e-paper display
+        update_display(img, epd)
 
     except IOError as e:
         logging.info(e)
