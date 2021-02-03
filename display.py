@@ -189,7 +189,7 @@ def _draw_forecast(image, forecast):
 
     # Iterate over forecast days in 'list' and draw widgets for each
     offset = 10
-    day_vert = 225
+    day_vert = 240
     day_width = 156
 
     day_register = 'day'
