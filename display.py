@@ -96,7 +96,7 @@ def _draw_current_weather(image, w):
     draw.text((480, 105), f"{w['description']} ", font = get_font(18), fill = 0)
     
     # Wind
-    y_offset = 170
+    y_offset = 200
     x_offset = pad + 30
     draw.text((x_offset, y_offset), f"{w['wind']['speed']:2.1f} mph {w['wind']['direction']}", font = get_font(18), fill = 0)
     wind = Image.open(os.path.join(picdir, 'wind.jpg'))
@@ -120,7 +120,8 @@ def _draw_current_weather(image, w):
     draw.text((x_offset, y_offset), f"updated: {current_time}", font = get_font(18), fill = 0)
     
     # Divider Line
-    draw.line(((pad + 20) , 230, (image.width - pad - 20), 230), fill = 0, width = 3)
+    y_offset += 40
+    draw.line(((pad + 20) , y_offset, (image.width - pad - 20), y_offset), fill = 0, width = 3)
 
     return image
 
