@@ -19,9 +19,6 @@ class OpenWeatherMap(WeatherProvider):
             ('units', 'imperial'),
         )
         response = requests.get(f'{self.endpoint}weather', params = params)
-
-        print(response.json())
-
         return response.json()
 
     # Get the current weather conditions at given zip code
@@ -44,7 +41,7 @@ class OpenWeatherMap(WeatherProvider):
 
         w['description'] = d['weather'][0]['description']
         w['category'] = d['weather'][0]['main']
-        w['city'] = d['sys']['name']
+        w['city'] = d['name']
         w['zip_code'] = self.zip_code
 
         return w
@@ -98,10 +95,11 @@ class OpenWeatherMap(WeatherProvider):
             'id': 3363,
             'country': 'US',
             'sunrise': 1612366406,
-            'sunset': 1612401070},
-            'timezone': -28800,
-            'id': 0,
-            'name': 'Arlington',
-            'cod': 200
+            'sunset': 1612401070
+            },
+        'timezone': -28800,
+        'id': 0,
+        'name': 'Arlington',
+        'cod': 200
         }
         return w
