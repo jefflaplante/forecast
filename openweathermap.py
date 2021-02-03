@@ -24,6 +24,9 @@ class OpenWeatherMap(WeatherProvider):
     # Get the current weather conditions at given zip code
     def get_weather(self):
         d = self._get()
+
+        print(d)
+
         w = {}
         w['temp'] = d['main']['temp']
         w['pressure'] = d['main']['pressure']
