@@ -25,6 +25,7 @@ class OpenWeatherMap(WeatherProvider):
     def get_weather(self):
         d = self._get()
         w = {}
+        w['zip_code'] = self.zip_code
         w['temp'] = d['main']['temp']
         w['pressure'] = d['main']['pressure']
         w['pressure_unit'] = 'rel. in.'
@@ -39,10 +40,10 @@ class OpenWeatherMap(WeatherProvider):
             'direction': self.cardinal_direction(d['wind']['deg'])
             }
 
+        # Unique keys to Open Weather Map
         w['description'] = d['weather'][0]['description']
         w['category'] = d['weather'][0]['main']
         w['city'] = d['name']
-        w['zip_code'] = self.zip_code
         return w
     
     # Get the 5 day forecast from openweathermap.org

@@ -34,26 +34,20 @@ def main():
         # get forecast data from API
         openWeather = OpenWeatherMap()
         w = openWeather.get_weather()
-        forecast = openWeather.get_forecast(5)
+        f = openWeather.get_forecast(5)
 
         # Initialize the display driver
         epd = epd7in5_V2.EPD()  # E-Paper display driver object
         epd.init()
 
-        # Create a new image to draw our display on
-        display_image = Image.new('1', (epd.width, epd.height), 255)  # 255: white
-
-        # Draw current conditions to the display image
-        display_image = display.draw_current_weather(display_image, w)
-
-        # Draw the forecast to the display image
-        display_image = display.draw_forecast(display_image, forecast)
+        # Generate a new weather display image
+        img = display.draw((epd.width, epd.height), w, f)
 
         # Update e-paper display
-        update_display(display_image, epd)
+        update_display(img, epd)
 
         # Write out image to disk as a jpeg
-        display_image.save('display.jpg', "JPEG")
+        img.save('display.jpg', "JPEG")
 
     except IOError as e:
         logging.info(e)

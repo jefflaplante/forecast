@@ -10,6 +10,7 @@ class Ambient(WeatherProvider):
         self.api_key = os.environ["AMBIENT_API_KEY"]
         self.app_key = os.environ["AMBIENT_APP_KEY"]
         self.device_mac = os.environ["AMBIENT_DEVICE_MAC"]
+        self.zip_code = os.environ["WEATHER_ZIP_CODE"]
 
         self.endpoint = "https://api.ambientweather.net/v1/devices/"
 
@@ -21,13 +22,23 @@ class Ambient(WeatherProvider):
         response = requests.get(f'{self.endpoint}{self.device_mac}', params = params)
         return response.json()
 
+    # Get the current weather conditions from Ambient Weather device
     def get_weather(self):
         d = self._get()
         w = {}
+        w['zip_code'] = self.zip_code
+
         w['temp'] = d['tempf']
         w['pressure'] = d['baromrelin']
         w['pressure_unit'] = 'mb'
         w['humidity'] = d['humidity']
+
+        w['rain_accum'] = d['hourlyrainin']
+        w['wind'] = {
+            'speed': d['windspeedmph'], 
+            'degree': d['winddir'], 
+            'direction': self.cardinal_direction(d['winddir'])
+            }
         return w
 
     def sample_data_weather(self):

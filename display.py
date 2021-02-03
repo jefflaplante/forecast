@@ -53,79 +53,79 @@ def get_icon(forecast):
         return sunny
 
 # Draw current weather information to the display image
-def draw_current_weather(image, w):
-        logging.info("Drawing current weather widgets")
+def _draw_current_weather(image, w):
+    logging.info("Drawing current weather widgets")
 
-        # Date and time
-        now = datetime.now()
-        current_time = now.strftime("%H:%M")
-        current_day = now.strftime("%A")
-        current_date_str = now.strftime("%b %d")
+    # Date and time
+    now = datetime.now()
+    current_time = now.strftime("%H:%M")
+    current_day = now.strftime("%A")
+    current_date_str = now.strftime("%b %d")
 
-        logging.info(f"Current date: {now}")
+    logging.info(f"Current date: {now}")
 
-        my_ip = ni.ifaddresses('wlan0')[AF_INET][0]['addr']
-        qr = generate_qr_code(f'http://{my_ip}')
-        title = f"{w['city']}, {w['zip_code']} "
+    my_ip = ni.ifaddresses('wlan0')[AF_INET][0]['addr']
+    qr = generate_qr_code(f'http://{my_ip}')
+    title = f"{w['city']}, {w['zip_code']} "
 
-        # Drawing utility
-        draw = ImageDraw.Draw(image)
+    # Drawing utility
+    draw = ImageDraw.Draw(image)
 
-        # Element padding
-        pad = 10
+    # Element padding
+    pad = 10
 
-        # IP
-        draw.text((670, pad), my_ip, font = get_font(10), fill = 0)
-        image.paste(qr, (745, pad))
+    # IP
+    draw.text((670, pad), my_ip, font = get_font(10), fill = 0)
+    image.paste(qr, (745, pad))
 
-        # Title
-        draw.text((pad, pad), title, font = get_font(24), fill = 0)
+    # Title
+    draw.text((pad, pad), title, font = get_font(24), fill = 0)
 
-        # Date
-        draw.text((40, 50), f"{current_day} ", font = get_font(80), fill = 0)
-        draw.text((342, 105), f"{current_date_str} ", font = get_font(22), fill = 0)
+    # Date
+    draw.text((40, 50), f"{current_day} ", font = get_font(80), fill = 0)
+    draw.text((342, 105), f"{current_date_str} ", font = get_font(22), fill = 0)
 
-        # Icon
-        icon = get_icon(w)
-        image.paste(icon, (540, 40))
+    # Icon
+    icon = get_icon(w)
+    image.paste(icon, (540, 40))
 
-        # Current Temp.    
-        draw.text((600, 30), f"{w['temp']:3.0f}° ", font = get_font(96), fill = 0)
+    # Current Temp.    
+    draw.text((600, 30), f"{w['temp']:3.0f}° ", font = get_font(96), fill = 0)
 
-        # Description
-        draw.text((480, 105), f"{w['description']} ", font = get_font(18), fill = 0)
-        
-        # Wind
-        y_offset = 170
-        x_offset = pad + 30
-        draw.text((x_offset, y_offset), f"{w['wind']['speed']:2.1f} mph {w['wind']['direction']}", font = get_font(18), fill = 0)
-        wind = Image.open(os.path.join(picdir, 'wind.jpg'))
-        image.paste(wind, ((x_offset + 120), (y_offset - 3)))
+    # Description
+    draw.text((480, 105), f"{w['description']} ", font = get_font(18), fill = 0)
+    
+    # Wind
+    y_offset = 170
+    x_offset = pad + 30
+    draw.text((x_offset, y_offset), f"{w['wind']['speed']:2.1f} mph {w['wind']['direction']}", font = get_font(18), fill = 0)
+    wind = Image.open(os.path.join(picdir, 'wind.jpg'))
+    image.paste(wind, ((x_offset + 120), (y_offset - 3)))
 
-        # Humidity
-        x_offset += 160
-        draw.text((x_offset, y_offset), f"{w['humidity']:3.0f} % Humidity ", font = get_font(18), fill = 0)
-        
-        # Pressure
-        x_offset += 150
-        draw.text((x_offset, y_offset), f"{w['pressure']:4.0f} mb ", font = get_font(18), fill = 0)
+    # Humidity
+    x_offset += 160
+    draw.text((x_offset, y_offset), f"{w['humidity']:3.0f} % Humidity ", font = get_font(18), fill = 0)
+    
+    # Pressure
+    x_offset += 150
+    draw.text((x_offset, y_offset), f"{w['pressure']:4.0f} mb ", font = get_font(18), fill = 0)
 
-        # Rain
-        x_offset += 95
-        if 'rain_accum' in w:
-            draw.text((x_offset, y_offset), f"{w['rain_accum']:2.2f} in/hr of rain ", font = get_font(18), fill = 0)
+    # Rain
+    x_offset += 95
+    if 'rain_accum' in w:
+        draw.text((x_offset, y_offset), f"{w['rain_accum']:2.2f} in/hr of rain ", font = get_font(18), fill = 0)
 
-        # Update time
-        x_offset += 200
-        draw.text((x_offset, y_offset), f"updated: {current_time}", font = get_font(18), fill = 0)
-        
-        # Divider Line
-        draw.line(((pad + 20) , 215, (image.width - pad - 20), 215), fill = 0, width = 3)
+    # Update time
+    x_offset += 200
+    draw.text((x_offset, y_offset), f"updated: {current_time}", font = get_font(18), fill = 0)
+    
+    # Divider Line
+    draw.line(((pad + 20) , 215, (image.width - pad - 20), 215), fill = 0, width = 3)
 
-        return image
+    return image
 
 # Draw a forecast day block from the x,y top left corner position for the block
-def draw_day(image, forecast, x, y):
+def _draw_day(image, forecast, x, y):
     logging.info("Drawing day widgets")
 
     wind = Image.open(os.path.join(picdir, 'wind.jpg'))
@@ -184,7 +184,7 @@ def draw_day(image, forecast, x, y):
     return image
 
 # Draw the forecast to the display image
-def draw_forecast(image, forecast):
+def _draw_forecast(image, forecast):
     logging.info("Iterating Forecast Days")
 
     # Iterate over forecast days in 'list' and draw widgets for each
@@ -208,7 +208,7 @@ def draw_forecast(image, forecast):
         # forecast data returns a dict for every 3 hours. We only want daily so find unique days and get third reporting for noon for that day.
         if day_register == day:
             if time_counter == 3:
-                image = draw_day(image, f, offset, day_vert) # Draw the day widget
+                image = _draw_day(image, f, offset, day_vert) # Draw the day widget
                 offset += day_width
             time_counter += 1
         else:
@@ -216,3 +216,18 @@ def draw_forecast(image, forecast):
             time_counter = 0
 
     return image
+
+# Create and draw the weather widgets onto a new display image
+def draw(dims, weather, forecast):
+    width, height = dims
+
+    # Create a new image to draw our display on
+    display_image = Image.new('1', (width, height), 255)  # 255: white
+
+    # Draw current conditions to the display image
+    display_image = _draw_current_weather(display_image, w)
+
+    # Draw the forecast to the display image
+    display_image = _draw_forecast(display_image, forecast)
+
+    return display_image
