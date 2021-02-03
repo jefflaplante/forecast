@@ -85,44 +85,48 @@ def _draw_current_weather(image, w):
 
     # Today's Date
     draw.text((30, 50), f"{current_day} ", font = get_font(80), fill = 0)
-    draw.text((180, 105), f"{current_date_str} ", font = get_font(22), fill = 0)
+    draw.text((190, 105), f"{current_date_str} ", font = get_font(22), fill = 0)
 
     # Weather Icon
-    icon = get_icon(w)
-    image.paste(icon, (540, 40))
+    if 'category' in w:
+        icon = get_icon(w)
+        image.paste(icon, (540, 40))
 
     # Temp.    
-    draw.text((600, 30), f"{w['temp']:3.0f}° ", font = get_font(96), fill = 0)
+    draw.text((600, 60), f"{w['temp']:3.0f}° ", font = get_font(96), fill = 0)
 
     # Weather Description
-    draw.text((480, 105), f"{w['description']} ", font = get_font(18), fill = 0)
+    if 'description' in w:
+        draw.text((480, 135), f"{w['description']} ", font = get_font(18), fill = 0)
     
     # ---
 
     # Wind
     y_offset = 200
-    x_offset = pad + 30
+    x_offset = pad + 20
     draw.text((x_offset, y_offset), f"{w['wind']['speed']:2.1f} mph {w['wind']['direction']}", font = get_font(18), fill = 0)
     wind = Image.open(os.path.join(picdir, 'wind.jpg'))
     image.paste(wind, ((x_offset + 120), (y_offset - 3)))
 
     # Humidity
     x_offset += 160
-    draw.text((x_offset, y_offset), f"{w['humidity']:3.0f} % Humidity ", font = get_font(18), fill = 0)
+    draw.text((x_offset, y_offset), f"{w['humidity']:3.0f}% Humidity ", font = get_font(18), fill = 0)
     
     # Pressure
     x_offset += 150
-    draw.text((x_offset, y_offset), f"{w['pressure']:4.0f} mb ", font = get_font(18), fill = 0)
+    draw.text((x_offset, y_offset), f"{w['pressure']:4.0f} {w['pressure_unit']} ", font = get_font(18), fill = 0)
 
     # Rain
-    x_offset += 95
+    x_offset += 120
     if 'rain_accum' in w:
         draw.text((x_offset, y_offset), f"{w['rain_accum']:2.2f} in/hr of rain ", font = get_font(18), fill = 0)
+    else:
+        draw.text((x_offset, y_offset), "0.0 in/hr of rain ", font = get_font(18), fill = 0)
 
     # ---
 
     # Update time
-    x_offset += 200
+    x_offset += 190
     draw.text((x_offset, y_offset), f"updated: {current_time}", font = get_font(18), fill = 0)
     
     # ---
