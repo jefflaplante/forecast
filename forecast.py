@@ -19,6 +19,9 @@ from netifaces import AF_INET
 import netifaces as ni
 from waveshare_epd import epd7in5_V2
 
+from ambient import Ambient
+from openweathermap import OpenWeatherMap 
+
 logging.basicConfig(level=logging.INFO)
 
 # Generate QR Code
@@ -53,11 +56,11 @@ def get_icon(forecast):
         sunny= Image.open(os.path.join(picdir, 'weather-sunny.jpg'))
         return sunny
 
-# Return the cardinal direction based on the wind direction degree
-def cardinal_direction(degree):
-    dirs = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW']
-    ix = round(degree / (360. / len(dirs)))
-    return dirs[ix % len(dirs)]
+# # Return the cardinal direction based on the wind direction degree
+# def cardinal_direction(degree):
+#     dirs = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW']
+#     ix = round(degree / (360. / len(dirs)))
+#     return dirs[ix % len(dirs)]
 
 # Return a datetime object by parsing date string from forecast data
 def get_datetime(date_str):
@@ -77,18 +80,18 @@ def get_forecast(api_key, zip_code, days):
         ('cnt', cnt),
         ('units', 'imperial'),
     )
-    response = requests.get('http://api.openweathermap.org/data/2.5/forecast', params=params)
+    response = requests.get('http://api.openweathermap.org/data/2.5/forecast', params = params)
     return response.json()
 
-# Get the current weather conditions at given zip code
-def get_weather(api_key, zip_code):
-    params = (
-        ('zip', f'{zip_code},us'),
-        ('appid', api_key),
-        ('units', 'imperial'),
-    )
-    response = requests.get('http://api.openweathermap.org/data/2.5/weather', params=params)
-    return response.json()
+# # Get the current weather conditions at given zip code
+# def get_weather(api_key, zip_code):
+#     params = (
+#         ('zip', f'{zip_code},us'),
+#         ('appid', api_key),
+#         ('units', 'imperial'),
+#     )
+#     response = requests.get('http://api.openweathermap.org/data/2.5/weather', params = params)
+#     return response.json()
 
 # Draw current weather information to the display image
 def draw_current_weather(image, w):
@@ -250,19 +253,19 @@ def draw_forecast(image, forecast):
 
     return image
 
-# Gather elements we want from larger dict
-def gather_weather_data(weather):
-    w = {'temp': weather['main']['temp']}
-    w['description'] = weather['weather'][0]['description']
-    w['category'] = weather['weather'][0]['main']
-    w['wind'] = {'speed': weather['wind']['speed'], 'degree': weather['wind']['deg'], 'direction': cardinal_direction(weather['wind']['deg'])}
-    w['pressure'] = weather['main']['pressure']
-    w['humidity'] = weather['main']['humidity']
+# # Gather elements we want from larger dict
+# def gather_weather_data(weather):
+#     w = {'temp': weather['main']['temp']}
+#     w['description'] = weather['weather'][0]['description']
+#     w['category'] = weather['weather'][0]['main']
+#     w['wind'] = {'speed': weather['wind']['speed'], 'degree': weather['wind']['deg'], 'direction': cardinal_direction(weather['wind']['deg'])}
+#     w['pressure'] = weather['main']['pressure']
+#     w['humidity'] = weather['main']['humidity']
 
-    if 'rain' in weather:
-        w['rain_accum'] = weather['rain']['1h']
+#     if 'rain' in weather:
+#         w['rain_accum'] = weather['rain']['1h']
 
-    return w
+#     return w
 
 # Update e-paper display
 def update_display(image, epd):
@@ -281,11 +284,14 @@ def main():
 
         # get forecast data from API
         days = 5 # Days to gather for forecast
-        forecast = get_forecast(api_key, zip_code, days)
-        weather = get_weather(api_key, zip_code)
+        forecast = OpenWeatherMap().get_forecast(days)
+        # forecast = get_forecast(api_key, zip_code, days)
 
-        # Current Weather Conditions from API response
-        w = gather_weather_data(weather)
+        w = OpenWeatherMap().get_weather()
+        # weather = get_weather(api_key, zip_code)
+        # # Current Weather Conditions from API response
+        # w = gather_weather_data(weather)
+
         w['zip_code'] = zip_code
         w['city'] = forecast['city']['name']
 
