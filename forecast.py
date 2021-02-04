@@ -59,7 +59,6 @@ def parse_log_level():
 
 def main():
     try:
-        level = parse_log_level()
         logging.basicConfig(level=parse_log_level())
 
         logging.info("Refreshing forecast")
@@ -69,7 +68,10 @@ def main():
         w = openWeather.get_weather()
         f = openWeather.get_forecast(5)
 
+        logging.debug("Weather data from Open Weather:")
         logging.debug(pformat(w))
+
+        logging.debug("Forecast data from Open Weather:")
         logging.debug(pformat(f))
 
         # merge data from ambient provider if environment variables are setup to use it
@@ -78,7 +80,8 @@ def main():
             wa = amb.get_weather()
             w.update(wa) # Ambient data will overlay Open Weather Maps data if it exists.
 
-        logging.debug(pformat(w))
+        logging.info("Weather data for display:")
+        logging.info(pformat(w))
 
         # Initialize the display driver
         epd = epd7in5_V2.EPD()
