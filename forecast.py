@@ -31,10 +31,14 @@ def main():
     try:
         logging.info("Refreshing forecast")
 
-        # get forecast data from API
+        # get forecast data from APIs
         openWeather = OpenWeatherMap()
         w = openWeather.get_weather()
         f = openWeather.get_forecast(5)
+
+        amb = Ambient()
+        wa = amb.get_weather()
+        w.update(wa)
 
         # Initialize the display driver
         epd = epd7in5_V2.EPD()  # E-Paper display driver object

@@ -27,7 +27,6 @@ class Ambient(WeatherProvider):
         d = self._get()
         w = {}
         w['zip_code'] = self.zip_code
-
         w['temp'] = d['tempf']
         w['pressure'] = d['baromrelin']
         w['pressure_unit'] = 'mb'
@@ -39,6 +38,12 @@ class Ambient(WeatherProvider):
             'degree': d['winddir'], 
             'direction': self.cardinal_direction(d['winddir'])
             }
+
+        w['uv'] = d['uv']
+        w['dewPoint'] = d['dewPoint']
+        w['temp_indoor'] = d['tempinf']
+        w['pm25_indoor'] = d['pm25_in']
+
         return w
 
     def sample_data_weather(self):
