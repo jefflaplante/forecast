@@ -104,15 +104,15 @@ def _draw_current_weather(image, w):
     # UV Index
     y_offset = 170
     x_offset = pad + 20
-    draw.text((x_offset, y_offset), f"UV Index: {w['uv']:3.0f} ", font = get_font(18), fill = 0)
+    draw.text((x_offset, y_offset), f"UV: {w['uv']:3.0f} ", font = get_font(18), fill = 0)
   
     # Dew Point
     x_offset += 160
-    draw.text((x_offset, y_offset), f"Dew point: {w['dew_point']:3.0f} ", font = get_font(18), fill = 0)
+    draw.text((x_offset, y_offset), f"Dew: {w['dew_point']:3.0f}° ", font = get_font(18), fill = 0)
 
     # pm25 Indoor
     x_offset += 150
-    draw.text((x_offset, y_offset), f"Air Quality: {w['pm25_indoor']:3.0f} ug/m^3 ", font = get_font(18), fill = 0)
+    draw.text((x_offset, y_offset), f"AQI: {w['pm25_indoor']:3.0f} ug/m^3 ", font = get_font(18), fill = 0)
 
     # ---
 
