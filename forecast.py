@@ -5,7 +5,7 @@ import os
 import time
 import traceback
 import logging
-import pprint
+from pprint import pformat
 import argparse
 
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')
@@ -19,8 +19,6 @@ from waveshare_epd import epd7in5_V2
 from ambient import Ambient
 from openweathermap import OpenWeatherMap 
 import display
-
-logging.basicConfig(level=logging.INFO)
 
 # Update e-paper display
 def update_display(image, epd):
@@ -62,7 +60,7 @@ def parse_log_level():
 def main():
     try:
         level = parse_log_level()
-        logging.basicConfig(level=level)
+        logging.basicConfig(level=parse_log_level())
 
         logging.info("Refreshing forecast")
 
@@ -71,14 +69,16 @@ def main():
         w = openWeather.get_weather()
         f = openWeather.get_forecast(5)
 
-        logging.debug(pprint.pprint(w))
-        logging.debug(pprint.pprint(f))
+        logging.debug(pformat(w))
+        logging.debug(pformat(f))
 
         # merge data from ambient provider if environment variables are setup to use it
         if 'AMBIENT_DEVICE_MAC' in os.environ:
             amb = Ambient()
             wa = amb.get_weather()
             w.update(wa) # Ambient data will overlay Open Weather Maps data if it exists.
+
+        logging.debug(pformat(w))
 
         # Initialize the display driver
         epd = epd7in5_V2.EPD()
