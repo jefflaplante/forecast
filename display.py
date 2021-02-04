@@ -107,7 +107,7 @@ def _draw_current_weather(image, w):
     draw.text((x_offset, y_offset), f"UV: {w['uv']:3.0f} ", font = get_font(18), fill = 0)
   
     # Dew Point
-    x_offset += 160
+    x_offset += 170
     draw.text((x_offset, y_offset), f"Dew: {w['dew_point']:3.0f}° ", font = get_font(18), fill = 0)
 
     # pm25 Indoor
