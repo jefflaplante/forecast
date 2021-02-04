@@ -27,6 +27,7 @@ def update_display(image, epd):
     epd.sleep()
     epd.Dev_exit()
 
+# Parse log level to option from CLI options
 def parse_log_level():
     parser = argparse.ArgumentParser()
     parser.add_argument(
