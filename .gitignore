@@ -1,3 +1,4 @@
 .env
 forecast.log
 display.jpg
+__pycache__/
