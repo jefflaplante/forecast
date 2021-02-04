@@ -28,7 +28,7 @@ class OpenWeatherMap(WeatherProvider):
         w['zip_code'] = self.zip_code
         w['temp'] = d['main']['temp']
         w['pressure'] = d['main']['pressure']
-        w['pressure_unit'] = 'rel. in.'
+        w['pressure_unit'] = 'mb'
         w['humidity'] = d['main']['humidity']
 
         if 'rain' in d:

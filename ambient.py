@@ -24,12 +24,12 @@ class Ambient(WeatherProvider):
 
     # Get the current weather conditions from Ambient Weather device
     def get_weather(self):
-        d = self._get()
+        d = self._get()[0]
         w = {}
         w['zip_code'] = self.zip_code
         w['temp'] = d['tempf']
         w['pressure'] = d['baromrelin']
-        w['pressure_unit'] = 'mb'
+        w['pressure_unit'] = 'rel. in.'
         w['humidity'] = d['humidity']
 
         w['rain_accum'] = d['hourlyrainin']
