@@ -101,54 +101,80 @@ def _draw_current_weather(image, w):
     
     # ---
 
-    # UV Index
+    item_width = 170
+    icon_width = 30
     y_offset = 170
+
+    # UV Index
     x_offset = pad + 20
     if 'uv' in w:
-        draw.text((x_offset, y_offset), f"UV: {w['uv']:3.0f} ", font = get_font(18), fill = 0)
+        uv = Image.open(os.path.join(picdir, 'uv.jpg'))
+        image.paste(uv, (x_offset , y_offset))
+    x_offset += icon_width
+    if 'uv' in w:
+        draw.text((x_offset, y_offset), f"{w['uv']:3.0f} ", font = get_font(18), fill = 0)
   
     # Dew Point
-    x_offset += 170
+    x_offset += item_width
     if 'dew_point' in w:
-        draw.text((x_offset, y_offset), f"Dew: {w['dew_point']:3.0f}° ", font = get_font(18), fill = 0)
+        dew = Image.open(os.path.join(picdir, 'star.jpg'))
+        image.paste(dew, (x_offset , y_offset))
+    x_offset += icon_width
+    if 'dew_point' in w:
+        draw.text((x_offset, y_offset), f"{w['dew_point']:3.0f}° ", font = get_font(18), fill = 0)
 
     # pm25 Indoor
-    x_offset += 140
+    x_offset += item_width
     if 'pm25_indoor' in w:
-        draw.text((x_offset, y_offset), f"AQI: {w['pm25_indoor']:3.0f} µg/m³", font = get_font(18), fill = 0)
+        air = Image.open(os.path.join(picdir, 'air-filter.jpg'))
+        image.paste(air, (x_offset , y_offset))
+    x_offset += icon_width
+    if 'pm25_indoor' in w:
+        draw.text((x_offset, y_offset), f"{w['pm25_indoor']:3.0f} µg/m³ ", font = get_font(18), fill = 0)
 
     # ---
 
-    # Wind
     y_offset = 200
-    x_offset = pad + 20
-    draw.text((x_offset, y_offset), f"{w['wind']['speed']:2.1f} mph {w['wind']['direction']}", font = get_font(18), fill = 0)
-    wind = Image.open(os.path.join(picdir, 'wind.jpg'))
-    image.paste(wind, ((x_offset + 120), y_offset))
 
+    # Wind
+    x_offset = pad + 20
+    wind = Image.open(os.path.join(picdir, 'wind.jpg'))
+    image.paste(wind, (x_offset , y_offset))
+    x_offset += icon_width
+    draw.text((x_offset, y_offset), f"{w['wind']['speed']:2.1f} mph {w['wind']['direction']} ", font = get_font(18), fill = 0)
+    
     # Humidity
-    x_offset += 160
-    draw.text((x_offset, y_offset), f"{w['humidity']:3.0f}% Humidity ", font = get_font(18), fill = 0)
+    x_offset += item_width
+    humidity = Image.open(os.path.join(picdir, 'humidity.jpg'))
+    image.paste(humidity, (x_offset , y_offset))
+    x_offset += icon_width
+    draw.text((x_offset, y_offset), f"{w['humidity']:3.0f}% ", font = get_font(18), fill = 0)
     
     # Pressure
-    x_offset += 150
+    x_offset += item_width
+    pressure = Image.open(os.path.join(picdir, 'thermometer.jpg'))
+    image.paste(pressure, (x_offset , y_offset))
+    x_offset += icon_width
     if w['pressure_unit'] == 'mb':
         draw.text((x_offset, y_offset), f"{w['pressure']:4.0f} {w['pressure_unit']} ", font = get_font(18), fill = 0)
     else:
         draw.text((x_offset, y_offset), f"{w['pressure']:4.2f} {w['pressure_unit']} ", font = get_font(18), fill = 0)
 
     # Rain
-    x_offset += 120
+    x_offset += item_width
+    drop = Image.open(os.path.join(picdir, 'drop.jpg'))
+    image.paste(drop, (x_offset , y_offset))
+    x_offset += icon_width
     if 'rain_accum' in w:
-        draw.text((x_offset, y_offset), f"{w['rain_accum']:2.2f} in/hr of rain ", font = get_font(18), fill = 0)
+        draw.text((x_offset, y_offset), f"{w['rain_accum']:2.2f} in/hr ", font = get_font(18), fill = 0)
     else:
-        draw.text((x_offset, y_offset), "0.0 in/hr of rain ", font = get_font(18), fill = 0)
+        draw.text((x_offset, y_offset), "0.0 in/hr ", font = get_font(18), fill = 0)
 
     # ---
 
     # Update time
-    x_offset += 190
-    draw.text((x_offset, y_offset), f"updated: {current_time}", font = get_font(18), fill = 0)
+    x_offset += 200
+    draw.text((x_offset, y_offset), f"as of: {current_time}", font = get_font(18), fill = 0)
     
     # ---
 
