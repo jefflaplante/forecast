@@ -124,7 +124,7 @@ def _draw_current_weather(image, w):
     x_offset = pad + 20
     draw.text((x_offset, y_offset), f"{w['wind']['speed']:2.1f} mph {w['wind']['direction']}", font = get_font(18), fill = 0)
     wind = Image.open(os.path.join(picdir, 'wind.jpg'))
-    image.paste(wind, ((x_offset + 120), (y_offset - 3)))
+    image.paste(wind, ((x_offset + 120), y_offset))
 
     # Humidity
     x_offset += 160
