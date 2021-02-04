@@ -36,9 +36,11 @@ def main():
         w = openWeather.get_weather()
         f = openWeather.get_forecast(5)
 
-        amb = Ambient()
-        wa = amb.get_weather()
-        w.update(wa)
+        # merge data from ambient provider if environment variables are setup to use it
+        if 'AMBIENT_DEVICE_MAC' in os.environ:
+            amb = Ambient()
+            wa = amb.get_weather()
+            w.update(wa)
 
         # Initialize the display driver
         epd = epd7in5_V2.EPD()  # E-Paper display driver object
