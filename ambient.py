@@ -29,7 +29,7 @@ class Ambient(WeatherProvider):
         w['zip_code'] = self.zip_code
         w['temp'] = d['tempf']
         w['pressure'] = d['baromrelin']
-        w['pressure_unit'] = 'rel. in.'
+        w['pressure_unit'] = 'InHg'
         w['humidity'] = d['humidity']
 
         w['rain_accum'] = d['hourlyrainin']
