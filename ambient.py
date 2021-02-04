@@ -40,7 +40,7 @@ class Ambient(WeatherProvider):
             }
 
         w['uv'] = d['uv']
-        w['dewPoint'] = d['dewPoint']
+        w['dew_point'] = d['dewPoint']
         w['temp_indoor'] = d['tempinf']
         w['pm25_indoor'] = d['pm25_in']
 
