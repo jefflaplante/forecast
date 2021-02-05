@@ -76,7 +76,25 @@ def get_AQI_desc(i):
         return 'hazardous'
     else:
         return 'very hazardous'
-    
+
+# text description for UVI index
+def get_UVI_desc(i):
+    # 0-2 low
+    # 3-5 moderate
+    # 6-7 high
+    # 8-10 very high
+    # 11+ extreme
+
+    if i < 2:
+        return 'low'
+    elif i > 3 and i < 6:
+        return 'moderate'
+    elif i > 5 and i < 8:
+        return 'high'
+    elif i > 7 and i < 11:
+        return 'very high'
+    else:
+        return 'extreme'
 
 # Draw current weather information to the display image
 def _draw_current_weather(image, w):
@@ -144,7 +162,7 @@ def _draw_current_weather(image, w):
         image.paste(uv, (x_offset , y_offset))
     x_offset += icon_width
     if 'uv' in w:
-        draw.text((x_offset, y_offset), f"{w['uv']:3.0f} ", font = get_font(18), fill = 0)
+        draw.text((x_offset, y_offset), f"{w['uv']:3.0f} {get_UVI_desc(w['uv'])} ", font = get_font(18), fill = 0)
   
     # Dew Point
     x_offset += item_width

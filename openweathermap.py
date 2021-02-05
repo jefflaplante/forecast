@@ -46,6 +46,10 @@ class OpenWeatherMap(WeatherProvider):
         w['city'] = d['name']
         w['coord'] = d['coord']
         return w
+
+    # TODO: added stub to document. Replace current 2 calls with one call to get current and forecast data
+    def get_weather_one_call(self):
+        print('https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}')
     
     # Get the 5 day forecast from openweathermap.org
     def get_forecast(self, days):
