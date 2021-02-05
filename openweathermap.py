@@ -44,6 +44,7 @@ class OpenWeatherMap(WeatherProvider):
         w['description'] = d['weather'][0]['description']
         w['category'] = d['weather'][0]['main']
         w['city'] = d['name']
+        w['coord'] = d['coord']
         return w
     
     # Get the 5 day forecast from openweathermap.org
