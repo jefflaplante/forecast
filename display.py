@@ -162,7 +162,7 @@ def _draw_current_weather(image, w):
         image.paste(uv, (x_offset , y_offset))
     x_offset += icon_width
     if 'uv' in w:
-        draw.text((x_offset, y_offset), f"{w['uv']:3.0f} {get_UVI_desc(w['uv'])} ", font = get_font(18), fill = 0)
+        draw.text((x_offset, y_offset), f"{w['uv']:2.0f} {get_UVI_desc(w['uv'])} ", font = get_font(18), fill = 0)
   
     # Dew Point
     x_offset += item_width
@@ -209,7 +209,7 @@ def _draw_current_weather(image, w):
     wind = Image.open(os.path.join(picdir, 'wind.jpg'))
     image.paste(wind, (x_offset , y_offset))
     x_offset += icon_width
-    draw.text((x_offset, y_offset), f"{w['wind']['speed']:2.1f} mph {w['wind']['direction']} ", font = get_font(18), fill = 0)
+    draw.text((x_offset, y_offset), f"{w['wind']['speed']:3.1f} mph {w['wind']['direction']} ", font = get_font(18), fill = 0)
     
     # Humidity
     x_offset += item_width
@@ -226,7 +226,7 @@ def _draw_current_weather(image, w):
     if w['pressure_unit'] == 'mb':
         draw.text((x_offset, y_offset), f"{w['pressure']:4.0f} {w['pressure_unit']} ", font = get_font(18), fill = 0)
     else:
-        draw.text((x_offset, y_offset), f"{w['pressure']:4.2f} {w['pressure_unit']} ", font = get_font(18), fill = 0)
+        draw.text((x_offset, y_offset), f"{w['pressure']:2.2f} {w['pressure_unit']} ", font = get_font(18), fill = 0)
 
     # Rain
     x_offset += item_width
