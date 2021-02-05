@@ -135,8 +135,8 @@ def _draw_current_weather(image, w):
     # Temp Indoor
     x_offset += item_width
     if 'temp_indoor' in w:
-        thermometer = Image.open(os.path.join(picdir, 'thermometer.jpg'))
-        image.paste(thermometer, (x_offset , y_offset))
+        home = Image.open(os.path.join(picdir, 'home.jpg'))
+        image.paste(home, (x_offset , y_offset))
     x_offset += icon_width
     if 'temp_indoor' in w:
         draw.text((x_offset, y_offset), f"{w['temp_indoor']:3.0f}° ", font = get_font(18), fill = 0)
