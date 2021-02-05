@@ -163,7 +163,16 @@ def _draw_current_weather(image, w):
     x_offset += icon_width
     if 'pm25_indoor' in w:
         draw.text((x_offset, y_offset), f"{w['pm25_indoor']:3.0f} µg/m³ ", font = get_font(18), fill = 0)
-        
+
+    # pm25 Outdoor
+    x_offset += item_width
+    if 'aqi' in w:
+        air = Image.open(os.path.join(picdir, 'air-filter.jpg'))
+        image.paste(air, (x_offset , y_offset))
+    x_offset += icon_width
+    if 'aqi' in w:
+        draw.text((x_offset, y_offset), f"{w['aqi']['pm2_5']:3.0f} µg/m³ ", font = get_font(18), fill = 0)
+
     # Temp Indoor
     x_offset += item_width
     if 'temp_indoor' in w:

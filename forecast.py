@@ -68,6 +68,8 @@ def main():
         openWeather = OpenWeatherMap()
         w = openWeather.get_weather()
         f = openWeather.get_forecast(5)
+        p = openWeather.get_air_pollution((w['coord']['lat'], w['coord']['lon']))
+        w["aqi"] = p['list'][0]['components']
 
         logging.debug("Weather data from Open Weather:")
         logging.debug(pformat(w))

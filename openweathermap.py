@@ -58,6 +58,17 @@ class OpenWeatherMap(WeatherProvider):
         response = requests.get(f'{self.endpoint}forecast', params = params)
         return response.json()
 
+    # Get the air pollution data for the lat/lon
+    def get_air_pollution(self, coords):
+        lat, lon = coords
+        params = (
+            ('lat', lat),
+            ('lon', lon),
+            ('appid', self.api_key),
+        )
+        response = requests.get(f'{self.endpoint}air_pollution', params = params)
+        return response.json()
+
     def sample_data_weather(self):
         w = {
             'coord': {
