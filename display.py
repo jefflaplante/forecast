@@ -111,7 +111,6 @@ def sunrise(w):
 def sunset(w):
     return time_adjust(w['sunset'], w['timezone'])
 
-
 # Draw current weather information to the display image
 def _draw_current_weather(image, w):
     logging.info("Drawing current weather widgets")
@@ -146,6 +145,15 @@ def _draw_current_weather(image, w):
     # Today's Date
     draw.text((30, 50), f"{current_day} ", font = get_font(80), fill = 0)
     draw.text((190, 105), f"{current_date_str} ", font = get_font(22), fill = 0)
+
+    # Sunrise and Sunset
+    sunrise = Image.open(os.path.join(picdir, 'sunrise.jpg'))
+    image.paste(uv, (220 , 85))
+    draw.text((250, 85), f"{sunrise(w)} ", font = get_font(18), fill = 0)
+    
+    sunset = Image.open(os.path.join(picdir, 'sunset.jpg'))
+    image.paste(uv, (220 , 85))
+    draw.text((250, 105), f"{sunset(w)} ", font = get_font(18), fill = 0)
 
     # Weather Icon
     if 'category' in w:
