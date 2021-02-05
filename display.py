@@ -147,13 +147,13 @@ def _draw_current_weather(image, w):
     draw.text((190, 105), f"{current_date_str} ", font = get_font(22), fill = 0)
 
     # Sunrise and Sunset
-    sunrise = Image.open(os.path.join(picdir, 'sunrise.jpg'))
-    image.paste(sunrise, (220 , 85))
-    draw.text((250, 85), f"{sunrise(w)} ", font = get_font(18), fill = 0)
+    sunrise_pic = Image.open(os.path.join(picdir, 'sunrise.jpg'))
+    image.paste(sunrise_pic, (290 , 75))
+    draw.text((320, 75), f"{sunrise(w)} ", font = get_font(18), fill = 0)
     
-    sunset = Image.open(os.path.join(picdir, 'sunset.jpg'))
-    image.paste(sunset, (220 , 85))
-    draw.text((250, 105), f"{sunset(w)} ", font = get_font(18), fill = 0)
+    sunset_pic = Image.open(os.path.join(picdir, 'sunset.jpg'))
+    image.paste(sunset_pic, (290 , 105))
+    draw.text((320, 105), f"{sunset(w)} ", font = get_font(18), fill = 0)
 
     # Weather Icon
     if 'category' in w:
