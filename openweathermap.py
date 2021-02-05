@@ -47,6 +47,9 @@ class OpenWeatherMap(WeatherProvider):
         w['category'] = d['weather'][0]['main']
         w['city'] = d['name']
         w['coord'] = d['coord']
+        w['sunrise'] = d['sys']['sunrise']
+        w['sunset'] = d['sys']['sunrise']
+        w['timezone'] = d['timezone']
         return w
 
     # TODO: added stub to document. Replace current 2 calls with one call to get current and forecast data

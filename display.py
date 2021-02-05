@@ -96,6 +96,22 @@ def get_UVI_desc(i):
     else:
         return 'extreme'
 
+# Adjust time from open weather to account for timezone offset
+def time_adjust(timestamp, timezone):
+    t = timestamp + timezone
+    d = datetime.utcfromtimestamp(t)
+    time = d.strftime("%H:%M")
+    return time
+
+# Return sunrise time
+def sunrise(w):
+    return time_adjust(w['sunrise'], w['timezone'])
+
+# Return sunset time
+def sunset(w):
+    return time_adjust(w['sunset'], w['timezone'])
+
+
 # Draw current weather information to the display image
 def _draw_current_weather(image, w):
     logging.info("Drawing current weather widgets")
