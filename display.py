@@ -137,11 +137,11 @@ def _draw_current_weather(image, w):
         image.paste(icon, (540, 40))
 
     # Temp.    
-    draw.text((600, 60), f"{w['temp']:3.0f}° ", font = get_font(96), fill = 0)
+    draw.text((590, 50), f"{w['temp']:3.0f}° ", font = get_font(96), fill = 0)
 
     # Weather Description
     if 'description' in w:
-        draw.text((480, 135), f"{w['description']} ", font = get_font(18), fill = 0)
+        draw.text((470, 125), f"{w['description']} ", font = get_font(18), fill = 0)
 
     # AQI Warning
     if 'pm25_indoor' in w:
