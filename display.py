@@ -260,7 +260,7 @@ def _draw_current_weather(image, w):
     # ---
 
     # Divider Line
-    y_offset += 40
+    y_offset += 35
     draw.line(((pad + 20) , y_offset, (image.width - pad - 20), y_offset), fill = 0, width = 3)
 
     return image
@@ -325,7 +325,7 @@ def _draw_forecast(image, forecast):
     logging.info("Iterating Forecast Days")
 
     offset = 10
-    day_vert = 245
+    day_vert = 250
     day_width = 156
     day_register = 'day'
     time_counter = 0
