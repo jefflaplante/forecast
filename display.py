@@ -180,7 +180,7 @@ def _draw_current_weather(image, w):
         image.paste(air, (x_offset , y_offset))
     x_offset += icon_width
     if 'pm25_indoor' in w:
-        draw.text((x_offset, y_offset), f"{w['pm25_indoor']:3.0f} µg/m³ ", font = get_font(18), fill = 0)
+        draw.text((x_offset, y_offset), f"{w['pm25_indoor']:3.0f} µg/m³ I", font = get_font(18), fill = 0)
 
     # pm25 Outdoor
     x_offset += item_width
@@ -189,7 +189,7 @@ def _draw_current_weather(image, w):
         image.paste(air, (x_offset , y_offset))
     x_offset += icon_width
     if 'aqi' in w:
-        draw.text((x_offset, y_offset), f"{w['aqi']['pm2_5']:3.0f} µg/m³ ", font = get_font(18), fill = 0)
+        draw.text((x_offset, y_offset), f"{w['aqi']['pm2_5']:3.0f} µg/m³ O", font = get_font(18), fill = 0)
 
     # Temp Indoor
     x_offset += item_width
@@ -199,6 +199,12 @@ def _draw_current_weather(image, w):
     x_offset += icon_width
     if 'temp_indoor' in w:
         draw.text((x_offset, y_offset), f"{w['temp_indoor']:3.0f}° ", font = get_font(18), fill = 0)
+
+    # ---
+     
+    # Update time
+    x_offset += 180
+    draw.text((x_offset, y_offset), f"updated: {current_time} ", font = get_font(14), fill = 0)
 
     # ---
 
@@ -237,12 +243,6 @@ def _draw_current_weather(image, w):
         draw.text((x_offset, y_offset), f"{w['rain_accum']:2.2f} in/hr ", font = get_font(18), fill = 0)
     else:
         draw.text((x_offset, y_offset), "0.0 in/hr ", font = get_font(18), fill = 0)
-
-    # ---
-
-    # Update time
-    x_offset += 180
-    draw.text((x_offset, y_offset), f"updated: {current_time} ", font = get_font(18), fill = 0)
     
     # ---
 
