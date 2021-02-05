@@ -101,9 +101,9 @@ def _draw_current_weather(image, w):
     
     # ---
 
-    item_width = 170
-    icon_width = 30
-    y_offset = 170
+    item_width = 115
+    icon_width = 25 
+    y_offset = 180
 
     # UV Index
     x_offset = pad + 20
@@ -134,7 +134,7 @@ def _draw_current_weather(image, w):
 
     # ---
 
-    y_offset = 200
+    y_offset = 210
 
     # Wind
     x_offset = pad + 20
@@ -173,8 +173,8 @@ def _draw_current_weather(image, w):
     # ---
 
     # Update time
-    x_offset += 200
-    draw.text((x_offset, y_offset), f"as of: {current_time}", font = get_font(18), fill = 0)
+    x_offset += 180
+    draw.text((x_offset, y_offset), f"updated: {current_time} ", font = get_font(18), fill = 0)
     
     # ---
 
