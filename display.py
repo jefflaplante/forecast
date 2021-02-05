@@ -128,8 +128,8 @@ def _draw_current_weather(image, w):
     # AQI Warning
     if 'pm25_indoor' in w:
         aqi = get_AQI_desc(w['pm25_indoor'])
-        if aqi != 'foo':
-            draw.text((250, 70), f"AQI is {aqi}! ", font = get_font(22), fill = 0)
+        if aqi != 'good':
+            draw.text((50, 140), f"AQI is {aqi}! ", font = get_font(22), fill = 0)
     
     # ---
 
