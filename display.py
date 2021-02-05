@@ -67,15 +67,15 @@ def get_AQI_desc(i):
     elif i > 12.0 and i < 35.5:
         return 'moderate'
     elif i > 35.4 and i < 55.5:
-        return 'sensitive'
+        return 'unhealthy for sensitive groups'
     elif i > 55.4 and i < 150.5:
         return 'unhealthy'
     elif i > 150.4 and i < 250.5:
-        return 'v. unhealthy'
+        return 'very unhealthy'
     elif i > 250.4 and i < 350.5:
         return 'hazardous'
     else:
-        return 'v. hazardous'
+        return 'very hazardous'
     
 
 # Draw current weather information to the display image
@@ -129,7 +129,7 @@ def _draw_current_weather(image, w):
     if 'pm25_indoor' in w:
         aqi = get_AQI_desc(w['pm25_indoor'])
         if aqi != 'foo':
-            draw.text((250, 50), f"{w['description']} ", font = get_font(22), fill = 0)
+            draw.text((250, 70), f"AQI is {aqi}! ", font = get_font(22), fill = 0)
     
     # ---
 
