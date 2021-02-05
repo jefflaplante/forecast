@@ -250,17 +250,12 @@ def _draw_current_weather(image, w):
     else:
         draw.text((x_offset, y_offset), "0.0 in/hr ", font = get_font(18), fill = 0)
     
-    x_offset = 90
+    x_offset += 100
     if 'daily' in rain:
-        draw.text((x_offset, y_offset), f"{rain['daily']:2.2f}\" today ", font = get_font(18), fill = 0)
+        draw.text((x_offset, y_offset), f"{rain['daily']:2.2f} | {rain['weekly']:2.2f} | {rain['monthly']:2.2f} | {rain['yearly']:2.2f} ",
+            font = get_font(18), fill = 0)
     else:
-        draw.text((x_offset, y_offset), "0.0 in today ", font = get_font(18), fill = 0)
-    
-    x_offset = 90
-    if 'monthly' in rain:
-        draw.text((x_offset, y_offset), f"{rain['monthly']:2.2f}\" month ", font = get_font(18), fill = 0)
-    else:
-        draw.text((x_offset, y_offset), "0.0\" month", font = get_font(18), fill = 0)
+        draw.text((x_offset, y_offset), "0.0 | ", font = get_font(18), fill = 0)
 
     # ---
 
