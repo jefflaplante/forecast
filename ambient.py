@@ -32,7 +32,15 @@ class Ambient(WeatherProvider):
         w['pressure_unit'] = 'InHg'
         w['humidity'] = d['humidity']
 
-        w['rain_accum'] = d['hourlyrainin']
+        w['rain'] = {
+            'rate': d['hourlyrainin'],
+            'event': d['eventrainin'],
+            'daily': d['dailyrainin'],
+            'weekly': d['weeklyrainin'],
+            'monthly': d['monthlyrainin'],
+            'yearly': d['yearlyrainin']
+        }
+
         w['wind'] = {
             'speed': d['windspeedmph'], 
             'degree': d['winddir'], 

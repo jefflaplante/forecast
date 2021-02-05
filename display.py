@@ -203,7 +203,8 @@ def _draw_current_weather(image, w):
     # ---
      
     # Update time
-    x_offset += 180
+    x_offset += 65
+    y_offset += 4
     draw.text((x_offset, y_offset), f"updated: {current_time} ", font = get_font(14), fill = 0)
 
     # ---
@@ -239,11 +240,28 @@ def _draw_current_weather(image, w):
     drop = Image.open(os.path.join(picdir, 'drop.jpg'))
     image.paste(drop, (x_offset , y_offset))
     x_offset += icon_width
-    if 'rain_accum' in w:
-        draw.text((x_offset, y_offset), f"{w['rain_accum']:2.2f} in/hr ", font = get_font(18), fill = 0)
+
+    rain = {}
+    if 'rain' in w:
+        rain = w['rain']
+
+    if 'rate' in rain:
+        draw.text((x_offset, y_offset), f"{rain['rate']:2.2f} in/hr ", font = get_font(18), fill = 0)
     else:
         draw.text((x_offset, y_offset), "0.0 in/hr ", font = get_font(18), fill = 0)
     
+    x_offset = 90
+    if 'daily' in rain:
+        draw.text((x_offset, y_offset), f"{rain['daily']:2.2f}\" today ", font = get_font(18), fill = 0)
+    else:
+        draw.text((x_offset, y_offset), "0.0 in today ", font = get_font(18), fill = 0)
+    
+    x_offset = 90
+    if 'monthly' in rain:
+        draw.text((x_offset, y_offset), f"{rain['monthly']:2.2f}\" month ", font = get_font(18), fill = 0)
+    else:
+        draw.text((x_offset, y_offset), "0.0\" month", font = get_font(18), fill = 0)
+
     # ---
 
     # Divider Line

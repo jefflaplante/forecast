@@ -32,7 +32,9 @@ class OpenWeatherMap(WeatherProvider):
         w['humidity'] = d['main']['humidity']
 
         if 'rain' in d:
-            w['rain_accum'] = d['rain']['1h']
+            w['rain'] = {
+                'rate': d['rain']['1h']
+            }
 
         w['wind'] = {
             'speed': d['wind']['speed'], 
