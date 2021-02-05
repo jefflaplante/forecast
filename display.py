@@ -203,13 +203,13 @@ def _draw_current_weather(image, w):
     # ---
      
     # Update time
-    x_offset += 65
+    x_offset += 60
     y_offset += 4
     draw.text((x_offset, y_offset), f"updated: {current_time} ", font = get_font(14), fill = 0)
 
     # ---
 
-    y_offset = 210
+    y_offset = 215
 
     # Wind
     x_offset = pad + 20
