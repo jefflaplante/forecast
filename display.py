@@ -154,8 +154,8 @@ def _draw_current_weather(image, w):
     # data has an error which is returning both times as the same value.
     # omit display of sunset if sunrise == sunset
     if sunrise(w) != sunset(w):
-        sunset = Image.open(os.path.join(picdir, 'sunset.jpg'))
-        image.paste(sunset, (290 , 105))
+        sunset_pic = Image.open(os.path.join(picdir, 'sunset.jpg'))
+        image.paste(sunset_pic, (290 , 105))
         draw.text((320, 105), f"{sunset(w)} ", font = get_font(18), fill = 0)
 
     # Weather Icon
