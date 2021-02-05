@@ -148,11 +148,11 @@ def _draw_current_weather(image, w):
 
     # Sunrise and Sunset
     sunrise = Image.open(os.path.join(picdir, 'sunrise.jpg'))
-    image.paste(uv, (220 , 85))
+    image.paste(sunrise, (220 , 85))
     draw.text((250, 85), f"{sunrise(w)} ", font = get_font(18), fill = 0)
     
     sunset = Image.open(os.path.join(picdir, 'sunset.jpg'))
-    image.paste(uv, (220 , 85))
+    image.paste(sunset, (220 , 85))
     draw.text((250, 105), f"{sunset(w)} ", font = get_font(18), fill = 0)
 
     # Weather Icon
