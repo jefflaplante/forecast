@@ -52,6 +52,32 @@ def get_icon(forecast):
         sunny= Image.open(os.path.join(picdir, 'weather-sunny.jpg'))
         return sunny
 
+# text description for AQI index
+def get_AQI_desc(i):    
+    # Good: 0.0 – 12.0 (µg/m3
+    # Moderate: 12.1 – 35.4 (µg/m3)
+    # Unhealthy for Sensitive Groups: 35.5 – 55.4 (µg/m3)
+    # Unhealthy: 55.5 – 150.4 (µg/m3)
+    # Very Unhealthy: 150.5 – 250.4 (µg/m3)
+    # Hazardous: 250.5 – 350.4 (µg/m3)
+    # Extremely Hazardous: 350.5 – 500 (µg/m3)
+
+    if i < 12.1:
+        return 'good'
+    elif i > 12.0 and i < 35.5:
+        return 'moderate'
+    elif i > 35.4 and i < 55.5:
+        return 'sensitive'
+    elif i > 55.4 and i < 150.5:
+        return 'unhealthy'
+    elif i > 150.4 and i < 250.5:
+        return 'v. unhealthy'
+    elif i > 250.4 and i < 350.5:
+        return 'hazardous'
+    else:
+        return 'v. hazardous'
+    
+
 # Draw current weather information to the display image
 def _draw_current_weather(image, w):
     logging.info("Drawing current weather widgets")
@@ -98,6 +124,12 @@ def _draw_current_weather(image, w):
     # Weather Description
     if 'description' in w:
         draw.text((480, 135), f"{w['description']} ", font = get_font(18), fill = 0)
+
+    # AQI Warning
+    if 'pm25_indoor' in w:
+        aqi = get_AQI_desc(w['pm25_indoor'])
+        if aqi != 'foo':
+            draw.text((250, 50), f"{w['description']} ", font = get_font(22), fill = 0)
     
     # ---
 
@@ -131,7 +163,7 @@ def _draw_current_weather(image, w):
     x_offset += icon_width
     if 'pm25_indoor' in w:
         draw.text((x_offset, y_offset), f"{w['pm25_indoor']:3.0f} µg/m³ ", font = get_font(18), fill = 0)
-
+        
     # Temp Indoor
     x_offset += item_width
     if 'temp_indoor' in w:
