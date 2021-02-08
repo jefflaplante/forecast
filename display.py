@@ -355,7 +355,6 @@ def _draw_forecast(image, forecast):
     day_vert = 250
     day_width = 156
     day_register = 'day'
-    time_counter = 0
 
     # Iterate over forecast days in 'list' and draw widgets for each
     for x in forecast['list']:
@@ -377,14 +376,14 @@ def _draw_forecast(image, forecast):
         # forecast data returns a dict for every 3 hours. 
         # We only want daily so find unique days and get third reporting for noon for that day.
         if day_register == day:
-            if time_counter == 3:
+            if "21:00:00" in f['date_str']:
+                logging.debug(f"*** Forecast: {f['date_str']} | {f['temp']}° | {f['description']}")
                 image = _draw_day(image, f, offset, day_vert) # Draw the day widget
                 offset += day_width
-            time_counter += 1
+            else:
+                logging.debug(f"Forecast: {f['date_str']} | {f['temp']}° | {f['description']}")
         else:
             day_register = day
-            time_counter = 0
-
     return image
 
 # Create and draw the weather widgets onto a new display image
