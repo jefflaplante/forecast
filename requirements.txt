@@ -8,3 +8,5 @@ responses==0.9.0
 RPi.GPIO==0.7.0
 spidev==3.4
 qrcode==6.1
+python-daemon==2.2.4
+
