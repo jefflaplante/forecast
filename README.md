@@ -27,16 +27,19 @@ The Waveshare drivers are included in this repository in the lib folder. You can
 Install python library requirements with pip
 
 ```
-python3 -m pip installl -r requirements.txt
+python3 -m pip install -r requirements.txt
 ```
 
 #### Evironment Variables
 
-Create a `.env` file in the project directory that contains the API key and zipcode as environment variables.
+Create a `.env` file in the project directory that contains the API key(s) and zipcode as environment variables. If you want to use the Ambient Weather integration, you need to create an account with Ambient and also create an API key and app key. You also need to get the MAC address off of your device and enter it here.
 
 ```
 export OPEN_WEATHER_MAP_API_KEY="<your key>"
 export WEATHER_ZIP_CODE=<your_zip>
+export AMBIENT_API_KEY=<your_key>
+export AMBIENT_APP_KEY=<your_key>
+export AMBIENT_DEVICE_MAC=<your_device_MAC_ID>
 ```
 
 This file will be sourced in crontab to specify secrets and config data for forecast.py.
